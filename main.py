@@ -106,3 +106,36 @@ while True:
         cv2.imshow('Camera', img)
         cv2.waitKey(1)
 
+
+    if choice == '1':
+        msg = 'Balance recharge'
+    elif choice == '2':
+        msg = 'File a complaint'
+    elif choice == '3':
+        msg = 'Wallet services'
+    else:
+        msg = 'Pay a bill'
+
+    file = open('receipt.txt', 'w')
+    file.write(
+        'Welcome our dear customer.\n'
+        f'Phone: {value}\n'
+        f'Service: {msg}\n'
+        f'Number of waiting customers: {randint(1, 10)}\n'
+    )
+    file.close()
+
+    t1 = time.time()
+    while time.time() - t1 < 5:
+        success, img = video.read()
+        img = cv2.flip(img, 1)
+        img = detector.find_hands(img, draw=False)
+        x, y = detector.get_point_position(img, 8)  # index finger tip
+        draw_keypad(img, (left, top))
+
+        cv2.putText(img, 'Take the receipt from the machine', (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.imshow('Camera', img)
+        cv2.waitKey(1)
+
+    value = ''
+    choice = ''
