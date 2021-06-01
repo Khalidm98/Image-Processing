@@ -50,9 +50,9 @@ def main():
         img = cv2.flip(img, 1)
 
         img = detector.find_hands(img)
-        lm_list = detector.find_position(img)
-        if len(lm_list) != 0:
-            print(lm_list[4])
+        # lm_list = detector.find_position(img)
+        # if len(lm_list) != 0:
+        #     print(lm_list[4])
 
         curr_time = time.time()
         fps = 1 / (curr_time - prev_time)

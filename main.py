@@ -1,3 +1,4 @@
+from random import randint
 import cv2
 import time
 import hand_tracking_module as htm
@@ -6,7 +7,7 @@ import hand_tracking_module as htm
 def draw_keypad(image, left_top=(0, 0), space=10):
     side = 60
     (left, top) = left_top
-    keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<', '0', '>']
+    keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<', '0', 'x']
 
     for row in range(4):
         y = int(top + row * (side + space))
@@ -19,7 +20,7 @@ def draw_keypad(image, left_top=(0, 0), space=10):
 def check_pressed(image, left_top=(0, 0), space=10):
     side = 60
     (left, top) = left_top
-    keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<', '0', '>']
+    keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<', '0', 'x']
 
     for row in range(4):
         y_key = top + (side + space) * row
@@ -36,15 +37,17 @@ def check_pressed(image, left_top=(0, 0), space=10):
 
 video = cv2.VideoCapture(0)
 left = int(video.get(3) - 240)
-top = 40
+top = 50
 # video.set(3, 800)   # width
 # video.set(4, 600)   # height
 
 detector = htm.HandDetector(max_hands=1, detect_con=0.75)
 t1, t2 = 0, 0
 value = ''
+choice = ''
 
 while True:
+    # while len(value) < 11:
     success, img = video.read()
     img = cv2.flip(img, 1)
     img = detector.find_hands(img, draw=False)
@@ -58,10 +61,10 @@ while True:
                 t1 = time.time()
             else:
                 t2 = time.time()
-                if t2 - t1 > 1.5:
+                if t2 - t1 > 1:
                     t1 = t2 = 0
-                    if key == '>':
-                        pass
+                    if key == 'x':
+                        value = ''
                     elif key == '<':
                         value = value[:-1]
                     else:
@@ -69,6 +72,7 @@ while True:
         else:
             t1 = t2 = 0
 
-    cv2.putText(img, value, (10, 50), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 0, 0), 3)
+    cv2.putText(img, 'Enter your phone number:', (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+    cv2.putText(img, value, (10, 70), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
     cv2.imshow('Camera', img)
     cv2.waitKey(1)
