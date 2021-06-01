@@ -47,32 +47,62 @@ value = ''
 choice = ''
 
 while True:
-    # while len(value) < 11:
-    success, img = video.read()
-    img = cv2.flip(img, 1)
-    img = detector.find_hands(img, draw=False)
-    x, y = detector.get_point_position(img, 8)  # index finger tip
-    draw_keypad(img, (left, top))
+    while len(value) < 11:
+        success, img = video.read()
+        img = cv2.flip(img, 1)
+        img = detector.find_hands(img, draw=False)
+        x, y = detector.get_point_position(img, 8)  # index finger tip
+        draw_keypad(img, (left, top))
 
-    if x:
-        key = check_pressed(img, (left, top))
-        if key:
-            if t1 == 0:
-                t1 = time.time()
+        if x:
+            key = check_pressed(img, (left, top))
+            if key:
+                if t1 == 0:
+                    t1 = time.time()
+                else:
+                    t2 = time.time()
+                    if t2 - t1 > 1:
+                        t1 = t2 = 0
+                        if key == 'x':
+                            value = ''
+                        elif key == '<':
+                            value = value[:-1]
+                        else:
+                            value = value + key
             else:
-                t2 = time.time()
-                if t2 - t1 > 1:
-                    t1 = t2 = 0
-                    if key == 'x':
-                        value = ''
-                    elif key == '<':
-                        value = value[:-1]
-                    else:
-                        value = value + key
-        else:
-            t1 = t2 = 0
+                t1 = t2 = 0
 
-    cv2.putText(img, 'Enter your phone number:', (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
-    cv2.putText(img, value, (10, 70), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
-    cv2.imshow('Camera', img)
-    cv2.waitKey(1)
+        cv2.putText(img, 'Enter your phone number:', (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(img, value, (10, 70), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.imshow('Camera', img)
+        cv2.waitKey(1)
+        
+    while not (choice in ['1', '2', '3', '4']):
+        success, img = video.read()
+        img = cv2.flip(img, 1)
+        img = detector.find_hands(img, draw=False)
+        x, y = detector.get_point_position(img, 8)  # index finger tip
+        draw_keypad(img, (left, top))
+
+        if x:
+            key = check_pressed(img, (left, top))
+            if key:
+                if t1 == 0:
+                    t1 = time.time()
+                else:
+                    t2 = time.time()
+                    if t2 - t1 > 1:
+                        t1 = t2 = 0
+                        if key in ['1', '2', '3', '4']:
+                            choice = key
+            else:
+                t1 = t2 = 0
+
+        cv2.putText(img, 'Select an option:', (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(img, '1. Balance recharge', (10, 70), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(img, '2. File a complaint', (10, 110), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(img, '3. Wallet services', (10, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(img, '4. Pay a bill', (10, 190), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+        cv2.imshow('Camera', img)
+        cv2.waitKey(1)
+
