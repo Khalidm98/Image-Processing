@@ -106,7 +106,6 @@ while True:
         cv2.imshow('Camera', img)
         cv2.waitKey(1)
 
-
     if choice == '1':
         msg = 'Balance recharge'
     elif choice == '2':
