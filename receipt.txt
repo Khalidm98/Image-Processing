@@ -1,4 +1,0 @@
-Welcome our dear customer.
-Phone: 12344444444
-Service: Pay a bill
-Number of waiting customers: 10
