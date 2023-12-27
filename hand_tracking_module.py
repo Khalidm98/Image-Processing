@@ -7,7 +7,7 @@ class HandDetector:
     def __init__(self, mode=False, max_hands=2, detect_con=0.5, track_con=0.5):
         self.mpDraw = mp.solutions.drawing_utils
         self.mpHands = mp.solutions.hands
-        self.hands = self.mpHands.Hands(mode, max_hands, detect_con, track_con)
+        self.hands = self.mpHands.Hands(mode, max_hands, 1, detect_con, track_con)
         self.results = None
 
     def find_hands(self, img, draw=True):
